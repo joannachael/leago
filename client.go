@@ -44,6 +44,10 @@ func NewClient(token string, httpClient *http.Client, limiter *throttled.GCRARat
 // Makes a request to the API, the result of which is the filling of the received structure.
 func (c *client) doRequest(ctx context.Context, region, address string, structure interface{}) error {
 	request, err := c.makeRequest(ctx, region, address)
+	
+	if err != nil {
+		return err
+	}
 
 	if err := c.applyLimit(); err != nil {
 		return err
