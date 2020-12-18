@@ -10,6 +10,8 @@ import (
 	"time"
 )
 
+var fullAddress = "https://%s.api.riotgames.com%s"
+
 type client struct {
 	// A client that implements the functionality of
 	// interacting with League of Legends game data.
@@ -42,23 +44,19 @@ func NewClient(token string, httpClient *http.Client, limiter *throttled.GCRARat
 }
 
 // Makes a request to the API, the result of which is the filling of the received structure.
-func (c *client) doRequest(ctx context.Context, region, address string, structure interface{}) error {
-	request, err := c.makeRequest(ctx, region, address)
-	
+func (c *client) doRequest(ctx context.Context, region, api string, structure interface{}) error {
+	request, err := c.makeRequest(ctx, region, api)
 	if err != nil {
 		return err
 	}
-
 	if err := c.applyLimit(); err != nil {
 		return err
 	}
-
+	
 	response, err := c.HTTPClient.Do(request)
-
 	if err != nil {
 		return err
 	}
-
 	if response.StatusCode != http.StatusOK {
 		err, found := responseErrors[response.StatusCode]
 		if !found {
@@ -66,41 +64,34 @@ func (c *client) doRequest(ctx context.Context, region, address string, structur
 		}
 		return err
 	}
-
+	
 	return c.unmarshalBody(response.Body, structure)
 }
 
 // Creates a request to the API, setting an access token to successfully complete it.
-func (c *client) makeRequest(ctx context.Context, region, address string) (*http.Request, error) {
+func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Request, error) {
 	if !availabilityCheck(region) {
 		return nil, regionNotSupported
 	}
 
-	requestPath := "https://" + region + ".api.riotgames.com" + address
-
+	requestPath := fmt.Sprintf(fullAddress, region, api)
 	request, err := http.NewRequestWithContext(ctx, "GET", requestPath, nil)
-
 	if err != nil {
 		return nil, err
 	}
-
 	request.Header.Set("X-Riot-Token", c.Token)
-
 	return request, nil
 }
 
 // Dumps the response body into the received structure.
 func (c *client) unmarshalBody(body io.ReadCloser, structure interface{}) error {
 	bodyToUnmarshal, err := ioutil.ReadAll(body)
-
 	if err != nil {
 		return err
 	}
-
 	if err := body.Close(); err != nil {
 		return err
 	}
-
 	return json.Unmarshal(bodyToUnmarshal, structure)
 }
 
@@ -109,15 +100,12 @@ func (c *client) unmarshalBody(body io.ReadCloser, structure interface{}) error 
 func (c *client) applyLimit() error {
 	for {
 		limited, ctx, err := c.Limiter.RateLimit("API", 1)
-
 		if err != nil {
 			return err
 		}
-
 		if !limited {
 			return nil
 		}
-
 		time.Sleep(ctx.RetryAfter)
 	}
 }
