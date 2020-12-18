@@ -69,9 +69,7 @@ func (c *client) GetEntriesBySummonerID(ctx context.Context, region, ID string) 
 	return entries, nil
 }
 
-func (c *client) GetEntriesByQueueTierAndDivision(
-	ctx context.Context, region, queue, tier, division string, page int,
-) ([]entry, error) {
+func (c *client) GetEntriesByQueueTierAndDivision(ctx context.Context, region, queue, tier, division string, page int) ([]entry, error) {
 	var entries []entry
 	address := "/lol/league/v4/entries/" + queue + "/" + tier + "/" + division + "?page=" + strconv.Itoa(page)
 	if err := c.doRequest(ctx, region, address, &entries); err != nil {
