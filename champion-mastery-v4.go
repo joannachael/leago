@@ -26,9 +26,7 @@ func (c *client) GetMasteriesBySummonerID(ctx context.Context, region, ID string
 	return masteries, nil
 }
 
-func (c *client) GetMasteryBySummonerAndChampionID(
-	ctx context.Context, region, summonerID string, championID int,
-) (*championMastery, error) {
+func (c *client) GetMasteryBySummonerAndChampionID(ctx context.Context, region, summonerID string, championID int) (*championMastery, error) {
 	var mastery championMastery
 	api := "/lol/champion-mastery/v4/champion-masteries/by-summoner/"
 	address := api + summonerID + "/by-champion/" + strconv.Itoa(championID)
