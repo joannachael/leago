@@ -30,6 +30,5 @@ var (
 	}
 
 	somethingWentWrong = errors.New("something went wrong while making a request")
-	tokenNotReceived   = errors.New("the token for making requests was not received")
 	regionNotSupported = errors.New("riot API does not support this region")
 )
