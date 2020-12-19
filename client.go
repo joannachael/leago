@@ -3,7 +3,6 @@ package leago
 import (
 	"context"
 	"fmt"
-	"github.com/go-kit/kit/examples/addsvc/pkg/addendpoint"
 	json "github.com/json-iterator/go"
 	"github.com/throttled/throttled/v2"
 	"io/ioutil"
