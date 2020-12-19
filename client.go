@@ -31,17 +31,11 @@ type client struct {
 
 // Returns a client that allows you to interact with the Riot API.
 func NewClient(token string, httpClient *http.Client, limiter *throttled.GCRARateLimiter) (*client, error) {
-	if token == "" {
-		return nil, tokenNotReceived
-	}
-
-	cli := client{
+	return &client{
 		Token:      token,
 		HTTPClient: httpClient,
 		Limiter:    limiter,
 	}
-
-	return &cli, nil
 }
 
 // Makes a request to the API, the result of which is the filling of the received structure.
@@ -66,7 +60,14 @@ func (c *client) doRequest(ctx context.Context, region, api string, structure in
 		return err
 	}
 	
-	return c.unmarshalBody(response.Body, structure)
+	readyBody, err := ioutil.ReadAll(body)
+	if err != nil {
+		return err
+	}
+	if err := body.Close(); err != nil {
+		return err
+	}
+	return json.Unmarshal(readyBody, structure)
 }
 
 // Creates a request to the API, setting an access token to successfully complete it.
@@ -74,7 +75,6 @@ func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Req
 	if !availabilityCheck(region) {
 		return nil, regionNotSupported
 	}
-
 	requestPath := fmt.Sprintf(fullAddress, region, api)
 	request, err := http.NewRequestWithContext(ctx, "GET", requestPath, nil)
 	if err != nil {
@@ -82,18 +82,6 @@ func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Req
 	}
 	request.Header.Set("X-Riot-Token", c.Token)
 	return request, nil
-}
-
-// Dumps the response body into the received structure.
-func (c *client) unmarshalBody(body io.ReadCloser, structure interface{}) error {
-	bodyToUnmarshal, err := ioutil.ReadAll(body)
-	if err != nil {
-		return err
-	}
-	if err := body.Close(); err != nil {
-		return err
-	}
-	return json.Unmarshal(bodyToUnmarshal, structure)
 }
 
 // Applies the limitation, but if the restrictions when adding the limiter
