@@ -64,11 +64,11 @@ func (c *client) doRequest(ctx context.Context, region, api string, structure in
 		return err
 	}
 	
-	readyBody, err := ioutil.ReadAll(body)
+	readyBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return err
 	}
-	if err := body.Close(); err != nil {
+	if err := response.Body.Close(); err != nil {
 		return err
 	}
 	return json.Unmarshal(readyBody, structure)
