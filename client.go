@@ -3,6 +3,7 @@ package leago
 import (
 	"context"
 	"fmt"
+	"github.com/go-kit/kit/examples/addsvc/pkg/addendpoint"
 	json "github.com/json-iterator/go"
 	"github.com/throttled/throttled/v2"
 	"io/ioutil"
@@ -13,7 +14,6 @@ import (
 var (
 	startingAddress = "https://%s.api.riotgames.com%s"
 	tokenKey    	= "X-Riot-Token"
-	limitKey        = "API"
 	limitQuantity   = 1
 )
 
@@ -48,10 +48,10 @@ func (c *client) doRequest(ctx context.Context, region, api string, structure in
 	if err != nil {
 		return err
 	}
-	if err := c.applyLimit(); err != nil {
+	if err := c.applyLimit(api); err != nil {
 		return err
 	}
-	
+
 	response, err := c.HTTPClient.Do(request)
 	if err != nil {
 		return err
@@ -63,7 +63,7 @@ func (c *client) doRequest(ctx context.Context, region, api string, structure in
 		}
 		return err
 	}
-	
+
 	readyBody, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return err
@@ -80,7 +80,10 @@ func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Req
 		return nil, regionNotSupported
 	}
 	request, err := http.NewRequestWithContext(
-		ctx, "GET", fmt.Sprintf(startingAddress, region, api), nil,
+		ctx,
+		"GET",
+		fmt.Sprintf(startingAddress, region, api),
+		nil,
 	)
 	if err != nil {
 		return nil, err
@@ -91,9 +94,9 @@ func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Req
 
 // Applies the limitation, but if the restrictions when adding the limiter
 // field do not match the Riot API restrictions, this method is useless.
-func (c *client) applyLimit() error {
+func (c *client) applyLimit(api string) error {
 	for {
-		limited, ctx, err := c.Limiter.RateLimit(limitKey, limitQuantity)
+		limited, ctx, err := c.Limiter.RateLimit(api, limitQuantity)
 		if err != nil {
 			return err
 		}
