@@ -12,7 +12,7 @@ import (
 
 var (
 	startingAddress = "https://%s.api.riotgames.com%s"
-	tokenKey    	= "X-Riot-Token"
+	tokenKey        = "X-Riot-Token"
 	limitQuantity   = 1
 )
 
