@@ -5,13 +5,17 @@ import (
 	"fmt"
 	json "github.com/json-iterator/go"
 	"github.com/throttled/throttled/v2"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
 )
 
-var fullAddress = "https://%s.api.riotgames.com%s"
+var (
+	startingAddress = "https://%s.api.riotgames.com%s"
+	tokenKey    	= "X-Riot-Token"
+	limitKey        = "API"
+	limitQuantity   = 1
+)
 
 type client struct {
 	// A client that implements the functionality of
@@ -19,7 +23,7 @@ type client struct {
 
 	// Riot API access token, which can only be obtained from their portal.
 	// To learn more: https://developer.riotgames.com/
-	Token string
+	AccessToken string
 
 	// An HTTP client through which requests can be made.
 	HTTPClient *http.Client
@@ -30,11 +34,11 @@ type client struct {
 }
 
 // Returns a client that allows you to interact with the Riot API.
-func NewClient(token string, httpClient *http.Client, limiter *throttled.GCRARateLimiter) (*client, error) {
+func NewClient(accessToken string, httpClient *http.Client, limiter *throttled.GCRARateLimiter) *client {
 	return &client{
-		Token:      token,
-		HTTPClient: httpClient,
-		Limiter:    limiter,
+		AccessToken: accessToken,
+		HTTPClient:  httpClient,
+		Limiter:     limiter,
 	}
 }
 
@@ -75,12 +79,13 @@ func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Req
 	if !availabilityCheck(region) {
 		return nil, regionNotSupported
 	}
-	requestPath := fmt.Sprintf(fullAddress, region, api)
-	request, err := http.NewRequestWithContext(ctx, "GET", requestPath, nil)
+	request, err := http.NewRequestWithContext(
+		ctx, "GET", fmt.Sprintf(startingAddress, region, api), nil,
+	)
 	if err != nil {
 		return nil, err
 	}
-	request.Header.Set("X-Riot-Token", c.Token)
+	request.Header.Set(tokenKey, c.AccessToken)
 	return request, nil
 }
 
@@ -88,7 +93,7 @@ func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Req
 // field do not match the Riot API restrictions, this method is useless.
 func (c *client) applyLimit() error {
 	for {
-		limited, ctx, err := c.Limiter.RateLimit("API", 1)
+		limited, ctx, err := c.Limiter.RateLimit(limitKey, limitQuantity)
 		if err != nil {
 			return err
 		}
