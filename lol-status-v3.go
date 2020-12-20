@@ -20,14 +20,14 @@ type (
 	}
 
 	incident struct {
-		ID        int64     `json:"id"`
+		Id        int64     `json:"id"`
 		Active    bool      `json:"active"`
 		CreatedAt string    `json:"created_at"`
 		Updates   []message `json:"updates"`
 	}
 
 	message struct {
-		ID           string        `json:"id"`
+		Id           string        `json:"id"`
 		Author       string        `json:"author"`
 		Heading      string        `json:"heading"`
 		Content      string        `json:"content"`
