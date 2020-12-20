@@ -92,12 +92,7 @@ func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Req
 	if !availabilityCheck(region) {
 		return nil, regionNotSupported
 	}
-	request, err := http.NewRequestWithContext(
-		ctx,
-		"GET",
-		fmt.Sprintf(startingAddress, region, api),
-		nil,
-	)
+	request, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf(startingAddress, region, api), nil)
 	if err != nil {
 		return nil, err
 	}
