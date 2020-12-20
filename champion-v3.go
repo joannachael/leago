@@ -3,8 +3,8 @@ package leago
 import "context"
 
 type rotation struct {
-	FreeChampionsIDs               []int `json:"freeChampionIds"`
-	FreeChampionsIDsForNewsPlayers []int `json:"freeChampionIdsForNewPlayers"`
+	FreeChampionsIds               []int `json:"freeChampionIds"`
+	FreeChampionsIdsForNewsPlayers []int `json:"freeChampionIdsForNewPlayers"`
 	MaxNewPlayerLevel              int   `json:"maxNewPlayerLevel"`
 }
 
