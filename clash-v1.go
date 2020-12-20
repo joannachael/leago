@@ -42,7 +42,7 @@ type (
 
 func (c *client) GetPlayersBySummonerId(ctx context.Context, region, summonerId string) ([]clashPlayer, error) {
 	var players []clashPlayer
-	if err := c.doRequest(ctx, region, "/lol/clash/v1/players/by-summoner/" + summonerID, &players); err != nil {
+	if err := c.doRequest(ctx, region, "/lol/clash/v1/players/by-summoner/" + summonerId, &players); err != nil {
 		return nil, err
 	}
 	return players, nil
