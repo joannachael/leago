@@ -7,35 +7,35 @@ import (
 
 type (
 	match struct {
-		GameID                int64                 `json:"gameId"`
+		GameId                int64                 `json:"gameId"`
 		ParticipantIdentities []participantIdentity `json:"participantIdentities"`
-		QueueID               int                   `json:"queueId"`
+		QueueId               int                   `json:"queueId"`
 		GameType              string                `json:"gameType"`
 		GameDuration          int64                 `json:"gameDuration"`
 		Teams                 []teamStats           `json:"teams"`
-		PlatformID            string                `json:"platformId"`
+		PlatformId            string                `json:"platformId"`
 		GameCreation          int64                 `json:"gameCreation"`
-		SeasonID              int                   `json:"seasonId"`
+		SeasonId              int                   `json:"seasonId"`
 		GameVersion           string                `json:"gameVersion"`
-		MapID                 int                   `json:"mapId"`
+		MapId                 int                   `json:"mapId"`
 		GameMode              string                `json:"gameMode"`
 		Participants          []participant         `json:"participants"`
 	}
 
 	participantIdentity struct {
-		ParticipantID int    `json:"participantId"`
+		ParticipantId int    `json:"participantId"`
 		Player        player `json:"player"`
 	}
 
 	player struct {
 		Icon              int    `json:"profileIcon"`
-		AccountID         string `json:"accountId"`
+		AccountId         string `json:"accountId"`
 		MatchHistoryURI   string `json:"matchHistoryUri"`
-		CurrentAccountID  string `json:"currentAccountId"`
-		CurrentPlatformID string `json:"currentPlatformId"`
+		CurrentAccountId  string `json:"currentAccountId"`
+		CurrentPlatformId string `json:"currentPlatformId"`
 		SummonerName      string `json:"summonerName"`
-		SummonerID        string `json:"summonerId"`
-		PlatformID        string `json:"platformId"`
+		SummonerId        string `json:"summonerId"`
+		PlatformId        string `json:"platformId"`
 	}
 
 	teamStats struct {
@@ -53,30 +53,30 @@ type (
 		FirstTower           bool   `json:"firstTower"`
 		VilemawKills         int    `json:"vilemawKills"`
 		FirstRiftHerald      bool   `json:"firstRiftHerald"`
-		TeamID               int    `json:"teamId"`
+		TeamId               int    `json:"teamId"`
 		Win                  string `json:"win"`
 	}
 
 	ban struct {
-		ChampionID int `json:"championId"`
+		ChampionId int `json:"championId"`
 		PickTurn   int `json:"pickTurn"`
 	}
 
 	participant struct {
-		ID                        int                 `json:"participantId"`
-		ChampionID                int                 `json:"championId"`
+		Id                        int                 `json:"participantId"`
+		ChampionId                int                 `json:"championId"`
 		Runes                     []participantRune   `json:"runes"`
 		Stats                     participantStats    `json:"stats"`
-		TeamID                    int                 `json:"teamId"`
+		TeamId                    int                 `json:"teamId"`
 		Timeline                  participantTimeline `json:"timeline"`
-		Spell1ID                  int                 `json:"spell1Id"`
-		Spell2ID                  int                 `json:"spell2Id"`
+		Spell1Id                  int                 `json:"spell1Id"`
+		Spell2Id                  int                 `json:"spell2Id"`
 		HighestAchievedSeasonTier string              `json:"highestAchievedSeasonTier"`
 		Masteries                 []mastery           `json:"masteries"`
 	}
 
 	participantRune struct {
-		ID   int `json:"runeId"`
+		Id   int `json:"runeId"`
 		Rank int `json:"rank"`
 	}
 
@@ -129,7 +129,7 @@ type (
 		CombatPlayerScore               int   `json:"combatPlayerScore"`
 		InhibitorKills                  int   `json:"inhibitorKills"`
 		TurretKills                     int   `json:"turretKills"`
-		ParticipantID                   int   `json:"participantId"`
+		ParticipantId                   int   `json:"participantId"`
 		TrueDamageTaken                 int64 `json:"trueDamageTaken"`
 		FirstBloodAssist                bool  `json:"firstBloodAssist"`
 		NodeCaptureAssist               int   `json:"nodeCaptureAssist"`
@@ -195,7 +195,7 @@ type (
 	}
 
 	participantTimeline struct {
-		ParticipantID               int                `json:"participantID"`
+		ParticipantId               int                `json:"participantId"`
 		CsDiffPerMinDeltas          map[string]float32 `json:"cSDiffPerMinDeltas"`
 		DamageTakenPerMinDeltas     map[string]float32 `json:"damageTakenPerMinDeltas"`
 		Role                        string             `json:"role"`
@@ -209,7 +209,7 @@ type (
 
 	mastery struct {
 		Rank int `json:"rank"`
-		ID   int `json:"masteryId"`
+		Id   int `json:"masteryId"`
 	}
 
 	matches struct {
@@ -220,10 +220,10 @@ type (
 	}
 
 	matchReference struct {
-		GameID     int64  `json:"gameId"`
+		GameId     int64  `json:"gameId"`
 		Role       string `json:"role"`
 		Season     int    `json:"season"`
-		PlatformID string `json:"platformId"`
+		PlatformId string `json:"platformId"`
 		Champion   int    `json:"champion"`
 		Queue      int    `json:"queue"`
 		Lane       string `json:"lane"`
@@ -242,7 +242,7 @@ type (
 	}
 
 	participantFrame struct {
-		ParticipantID       int      `json:"participantId"`
+		ParticipantId       int      `json:"participantId"`
 		MinionsKilled       int      `json:"minionsKilled"`
 		TeamScore           int      `json:"teamScore"`
 		DominionScore       int      `json:"dominionScore"`
@@ -258,26 +258,26 @@ type (
 		LaneType                string   `json:"laneType"`
 		SkillSlot               int      `json:"skillSlot"`
 		AscendedType            string   `json:"ascendedType"`
-		CreatorID               int      `json:"creatorId"`
-		AfterID                 int      `json:"afterId"`
+		CreatorId               int      `json:"creatorId"`
+		AfterId                 int      `json:"afterId"`
 		EventType               string   `json:"eventType"`
 		Type                    string   `json:"type"`
 		LevelUpType             string   `json:"levelUpType"`
 		WardType                string   `json:"wardType"`
-		ParticipantID           int      `json:"participantId"`
+		ParticipantId           int      `json:"participantId"`
 		TowerType               string   `json:"towerType"`
-		ItemID                  int      `json:"itemId"`
-		BeforeID                int      `json:"beforeId"`
+		ItemId                  int      `json:"itemId"`
+		BeforeId                int      `json:"beforeId"`
 		PointCaptured           string   `json:"pointCaptured"`
 		MonsterType             string   `json:"monsterType"`
 		MonsterSubType          string   `json:"monsterSubType"`
-		TeamID                  int      `json:"teamId"`
+		TeamId                  int      `json:"teamId"`
 		Position                position `json:"position"`
-		KillerID                int      `json:"killerId"`
+		KillerId                int      `json:"killerId"`
 		Timestamp               int64    `json:"timestamp"`
-		AssistingParticipantIDs []int    `json:"assistingParticipantIds"`
+		AssistingParticipantIds []int    `json:"assistingParticipantIds"`
 		BuildingType            string   `json:"buildingType"`
-		VictimID                int      `json:"victimId"`
+		VictimId                int      `json:"victimId"`
 	}
 
 	position struct {
@@ -286,43 +286,43 @@ type (
 	}
 )
 
-func (c *client) GetMatchByID(ctx context.Context, region string, ID int64) (*match, error) {
+func (c *client) GetMatchById(ctx context.Context, region string, matchId int64) (*match, error) {
 	var match match
-	if err := c.doRequest(ctx, region, "/lol/match/v4/matches/" + strconv.FormatInt(ID, 10), &match); err != nil {
+	if err := c.doRequest(ctx, region, "/lol/match/v4/matches/" + strconv.FormatInt(matchId, 10), &match); err != nil {
 		return nil, err
 	}
 	return &match, nil
 }
 
-func (c *client) GetMatchByIDAndTournamentCode(ctx context.Context, region, code string, ID int64) (*match, error) {
+func (c *client) GetMatchByIdAndTournamentCode(ctx context.Context, region, tournamentCode string, matchId int64) (*match, error) {
 	var match match
-	address := "/lol/match/v4/matches/" + strconv.FormatInt(ID, 10) + "/by-tournament-code/" + code
+	address := "/lol/match/v4/matches/" + strconv.FormatInt(matchId, 10) + "/by-tournament-code/" + tournamentCode
 	if err := c.doRequest(ctx, region, address, &match); err != nil {
 		return nil, err
 	}
 	return &match, nil
 }
 
-func (c *client) GetMatchesBySummonerAccountID(ctx context.Context, region, ID string) (*matches, error) {
+func (c *client) GetMatchesBySummonerAccountId(ctx context.Context, region, accountId string) (*matches, error) {
 	var matches matches
-	if err := c.doRequest(ctx, region, "/lol/match/v4/matchlists/by-account/" + ID, &matches); err != nil {
+	if err := c.doRequest(ctx, region, "/lol/match/v4/matchlists/by-account/" + accountId, &matches); err != nil {
 		return nil, err
 	}
 	return &matches, nil
 }
 
-func (c *client) GetMatchIDsByTournamentCode(ctx context.Context, region, code string) ([]int64, error) {
-	var matchIDs []int64
-	address := "/lol/match/v4/matches/by-tournament-code/" + code + "/ids"
-	if err := c.doRequest(ctx, region, address, &matchIDs); err != nil {
+func (c *client) GetMatchIdsByTournamentCode(ctx context.Context, region, tournamentCode string) ([]int64, error) {
+	var matchIds []int64
+	address := "/lol/match/v4/matches/by-tournament-code/" + tournamentCode + "/ids"
+	if err := c.doRequest(ctx, region, address, &matchIds); err != nil {
 		return nil, err
 	}
-	return matchIDs, nil
+	return matchIds, nil
 }
 
-func (c *client) GetTimelinesByMatchID(ctx context.Context, region string, ID int64) (*matchTimeline, error) {
+func (c *client) GetTimelinesByMatchId(ctx context.Context, region string, matchId int64) (*matchTimeline, error) {
 	var timelines matchTimeline
-	address := "/lol/match/v4/timelines/by-match/" + strconv.FormatInt(ID, 10)
+	address := "/lol/match/v4/timelines/by-match/" + strconv.FormatInt(matchId, 10)
 	if err := c.doRequest(ctx, region, address, &timelines); err != nil {
 		return nil, err
 	}
