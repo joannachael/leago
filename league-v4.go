@@ -24,12 +24,12 @@ type (
 		Rank         string     `json:"rank"`
 		Points       int        `json:"leaguePoints"`
 		Losses       int        `json:"losses"`
-		SummonerID   string     `json:"summonerId"`
+		SummonerId   string     `json:"summonerId"`
 	}
 
 	entry struct {
-		ID           string     `json:"leagueId"`
-		SummonerID   string     `json:"summonerId"`
+		Id           string     `json:"leagueId"`
+		SummonerId   string     `json:"summonerId"`
 		SummonerName string     `json:"summonerName"`
 		QueueType    string     `json:"queueType"`
 		Tier         string     `json:"tier"`
@@ -45,7 +45,7 @@ type (
 	}
 
 	leagueList struct {
-		ID      string `json:"leagueId"`
+		Id      string `json:"leagueId"`
 		Name    string `json:"name"`
 		Entries []item `json:"entries"`
 		Tier    string `json:"tier"`
@@ -61,9 +61,9 @@ func (c *client) GetChallengerLeagueByQueue(ctx context.Context, region, queue s
 	return &leagueList, nil
 }
 
-func (c *client) GetEntriesBySummonerID(ctx context.Context, region, ID string) ([]entry, error) {
+func (c *client) GetEntriesBySummonerId(ctx context.Context, region, summonerId string) ([]entry, error) {
 	var entries []entry
-	if err := c.doRequest(ctx, region, "/lol/league/v4/entries/by-summoner/" + ID, &entries); err != nil {
+	if err := c.doRequest(ctx, region, "/lol/league/v4/entries/by-summoner/" + summonerId, &entries); err != nil {
 		return nil, err
 	}
 	return entries, nil
@@ -86,9 +86,9 @@ func (c *client) GetGrandmasterLeagueByQueue(ctx context.Context, region, queue 
 	return &leagueList, nil
 }
 
-func (c *client) GetLeagueByID(ctx context.Context, region, leagueID string) (*leagueList, error) {
+func (c *client) GetLeagueById(ctx context.Context, region, leagueId string) (*leagueList, error) {
 	var leagueList leagueList
-	if err := c.doRequest(ctx, region, "/lol/league/v4/leagues/" + leagueID, &leagueList); err != nil {
+	if err := c.doRequest(ctx, region, "/lol/league/v4/leagues/" + leagueId, &leagueList); err != nil {
 		return nil, err
 	}
 	return &leagueList, nil
