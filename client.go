@@ -5,6 +5,7 @@ import (
 	"fmt"
 	json "github.com/json-iterator/go"
 	"github.com/throttled/throttled/v2"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -41,7 +42,7 @@ func NewClient(accessToken string, httpClient *http.Client, limiter *throttled.G
 	}
 }
 
-// Makes a request to the API, the result of which is the filling of the received structure.
+// Makes a request to the api, the purpose of which is to get json to fill the received structure.
 func (c *client) doRequest(ctx context.Context, region, api string, structure interface{}) error {
 	request, err := c.makeRequest(ctx, region, api)
 	if err != nil {
@@ -51,23 +52,36 @@ func (c *client) doRequest(ctx context.Context, region, api string, structure in
 		return err
 	}
 
-	response, err := c.HTTPClient.Do(request)
+	body, err := c.getResponseBody(request)
 	if err != nil {
 		return err
+	}
+	return c.unloadBody(body, structure)
+}
+
+// Makes a request and returns the response body.
+func (c *client) getResponseBody(request *http.Request) (io.ReadCloser, error) {
+	response, err := c.HTTPClient.Do(request)
+	if err != nil {
+		return nil, err
 	}
 	if response.StatusCode != http.StatusOK {
 		err, found := responseErrors[response.StatusCode]
 		if !found {
 			err = somethingWentWrong
 		}
-		return err
+		return nil, err
 	}
+	return response.Body, nil
+}
 
-	readyBody, err := ioutil.ReadAll(response.Body)
+// Unloads the received body containing json into the received structure.
+func (c *client) unloadBody(body io.ReadCloser, structure interface{}) error {
+	readyBody, err := ioutil.ReadAll(body)
 	if err != nil {
 		return err
 	}
-	if err := response.Body.Close(); err != nil {
+	if err := body.Close(); err != nil {
 		return err
 	}
 	return json.Unmarshal(readyBody, structure)
