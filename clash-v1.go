@@ -48,9 +48,9 @@ func (c *client) GetPlayersBySummonerId(ctx context.Context, region, summonerId 
 	return players, nil
 }
 
-func (c *client) GetTeamById(ctx context.Context, region, Id string) (*team, error) {
+func (c *client) GetTeamById(ctx context.Context, region, teamId string) (*team, error) {
 	var team team
-	if err := c.doRequest(ctx, region, "/lol/clash/v1/teams/" + Id, &team); err != nil {
+	if err := c.doRequest(ctx, region, "/lol/clash/v1/teams/" + teamId, &team); err != nil {
 		return nil, err
 	}
 	return &team, nil
@@ -64,17 +64,17 @@ func (c *client) GetTournaments(ctx context.Context, region string) ([]tournamen
 	return tournaments, nil
 }
 
-func (c *client) GetTournamentByTeamId(ctx context.Context, region, Id string) (*tournament, error) {
+func (c *client) GetTournamentByTeamId(ctx context.Context, region, teamId string) (*tournament, error) {
 	var tournament tournament
-	if err := c.doRequest(ctx, region, "/lol/clash/v1/tournaments/by-team/" + Id, &tournament); err != nil {
+	if err := c.doRequest(ctx, region, "/lol/clash/v1/tournaments/by-team/" + teamId, &tournament); err != nil {
 		return nil, err
 	}
 	return &tournament, nil
 }
 
-func (c *client) GetTournamentById(ctx context.Context, region string, Id int) (*tournament, error) {
+func (c *client) GetTournamentById(ctx context.Context, region string, tournamentId int) (*tournament, error) {
 	var tournament tournament
-	if err := c.doRequest(ctx, region, "/lol/clash/v1/tournaments/" + strconv.Itoa(Id), &tournament); err != nil {
+	if err := c.doRequest(ctx, region, "/lol/clash/v1/tournaments/" + strconv.Itoa(tournamentId), &tournament); err != nil {
 		return nil, err
 	}
 	return &tournament, nil
