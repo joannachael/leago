@@ -3,51 +3,46 @@ package leago
 import "context"
 
 type (
-	shardStatus struct {
-		Locales   []string  `json:"locales"`
-		Hostname  string    `json:"hostname"`
-		Name      string    `json:"name"`
-		Services  []service `json:"services"`
-		Slug      string    `json:"slug"`
-		RegionTag string    `json:"region_tag"`
+	platformData struct {
+		Id           string   `json:"id"`
+		Name         string   `json:"name"`
+		Locales      []string `json:"locales"`
+		Maintenances []status `json:"maintenances"`
+		Incidents    []status `json:"incidents"`
 	}
 
-	service struct {
-		Name      string     `json:"name"`
-		Slug      string     `json:"slug"`
-		Status    string     `json:"status"`
-		Incidents []incident `json:"incidents"`
+	status struct {
+		Id                int       `json:"id"`
+		MaintenanceStatus string    `json:"maintenance_status"`
+		IncidentSeverity  string    `json:"incident_severity"`
+		Titles            []content `json:"titles"`
+		Updates           []update  `json:"updates"`
+		CreatedAt         string    `json:"created_at"`
+		ArchiveAt         string    `json:"archive_at"`
+		UpdatedAt         string    `json:"updated_at"`
+		Platforms         []string  `json:"platforms"`
 	}
 
-	incident struct {
-		Id        int64     `json:"id"`
-		Active    bool      `json:"active"`
-		CreatedAt string    `json:"created_at"`
-		Updates   []message `json:"updates"`
+	update struct {
+		Id               int       `json:"id"`
+		Author           string    `json:"author"`
+		Publish          bool      `json:"publish"`
+		PublishLocations []string  `json:"publish_locations"`
+		Translations     []content `json:"translations"`
+		CreatedAt        string    `json:"created_at"`
+		UpdatedAt        string    `json:"updated_at"`
 	}
 
-	message struct {
-		Id           string        `json:"id"`
-		Author       string        `json:"author"`
-		Heading      string        `json:"heading"`
-		Content      string        `json:"content"`
-		Severity     string        `json:"severity"`
-		CreatedAt    string        `json:"created_at"`
-		UpdatedAt    string        `json:"updated_at"`
-		Translations []translation `json:"translations"`
-	}
-
-	translation struct {
-		UpdatedAt string `json:"updated_at"`
-		Locale    string `json:"locale"`
-		Content   string `json:"content"`
+	content struct {
+		Locale  string `json:"locale"`
+		Content string `json:"content"`
 	}
 )
 
-func (c *client) GetStatus(ctx context.Context, region string) (*shardStatus, error) {
-	var status shardStatus
-	if err := c.doRequest(ctx, region, "/lol/status/v3/shard-data", &status); err != nil {
+func (c *client) GetStatus(ctx context.Context, region string) (*platformData, error) {
+	var platformData platformData
+	if err := c.doRequest(ctx, region, "/lol/status/v4/platform-data", &platformData); err != nil {
 		return nil, err
 	}
-	return &status, nil
+	return &platformData, nil
 }
