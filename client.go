@@ -33,7 +33,6 @@ type client struct {
 	Limiter *throttled.GCRARateLimiter
 }
 
-// Returns a client that allows you to interact with the Riot API.
 func NewClient(accessToken string, httpClient *http.Client, limiter *throttled.GCRARateLimiter) *client {
 	return &client{
 		AccessToken: accessToken,
@@ -42,7 +41,6 @@ func NewClient(accessToken string, httpClient *http.Client, limiter *throttled.G
 	}
 }
 
-// Makes a request to the api, the purpose of which is to get json to fill the received structure.
 func (c *client) doRequest(ctx context.Context, region, api string, structure interface{}) error {
 	request, err := c.makeRequest(ctx, region, api)
 	if err != nil {
@@ -59,7 +57,6 @@ func (c *client) doRequest(ctx context.Context, region, api string, structure in
 	return c.unloadBody(body, structure)
 }
 
-// Makes a request and returns the response body.
 func (c *client) getResponseBody(request *http.Request) (io.ReadCloser, error) {
 	response, err := c.HTTPClient.Do(request)
 	if err != nil {
@@ -75,7 +72,6 @@ func (c *client) getResponseBody(request *http.Request) (io.ReadCloser, error) {
 	return response.Body, nil
 }
 
-// Unloads the received body containing json into the received structure.
 func (c *client) unloadBody(body io.ReadCloser, structure interface{}) error {
 	readyBody, err := ioutil.ReadAll(body)
 	if err != nil {
@@ -87,12 +83,12 @@ func (c *client) unloadBody(body io.ReadCloser, structure interface{}) error {
 	return json.Unmarshal(readyBody, structure)
 }
 
-// Creates a request to the API, setting an access token to successfully complete it.
 func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Request, error) {
 	if !availabilityCheck(region) {
 		return nil, regionNotSupported
 	}
-	request, err := http.NewRequestWithContext(ctx, "GET", fmt.Sprintf(startingAddress, region, api), nil)
+	fullRequestPath := fmt.Sprintf(startingAddress, region, api)
+	request, err := http.NewRequestWithContext(ctx, "GET", fullRequestPath, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +96,6 @@ func (c *client) makeRequest(ctx context.Context, region, api string) (*http.Req
 	return request, nil
 }
 
-// Applies the limitation, but if the restrictions when adding the limiter
-// field do not match the Riot API restrictions, this method is useless.
 func (c *client) applyLimit(api string) error {
 	for {
 		limited, ctx, err := c.Limiter.RateLimit(api, limitQuantity)
