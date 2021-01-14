@@ -19,7 +19,7 @@ var (
 
 type client struct {
 	// A client that implements the functionality of
-	// interacting with League of Legends game data.
+	// interacting with LoL API.
 
 	// Riot API access token, which can only be obtained from their portal.
 	// To learn more: https://developer.riotgames.com/
