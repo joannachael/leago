@@ -18,18 +18,17 @@ var (
 )
 
 type client struct {
-	// A client that implements the functionality of
-	// interacting with LoL API.
-
-	// Riot API access token, which can only be obtained from their portal.
-	// To learn more: https://developer.riotgames.com/
+	// A client that implements Riot API functions 
+	// (League of Legends part).
+	
+	// Riot API access token. You can receive it from the 
+	// portal. To learn more: https://developer.riotgames.com/
 	AccessToken string
-
-	// An HTTP client through which requests can be made.
+	
 	HTTPClient *http.Client
 
-	// A field that provides a limit on the number of requests
-	// in a certain period of time, which avoids the 429 error.
+	// A requests limiter that controls the number of requests at 
+	// a given time. It avoid to avoid 429 (RateLimitExceeded) error.
 	Limiter *throttled.GCRARateLimiter
 }
 
