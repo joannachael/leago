@@ -4,7 +4,7 @@
 ![League of Legends picture](https://coop-land.ru/uploads/posts/2020-01/1578739860_1.jpeg)
 
 ## Notes
-* Riot API has many more methods that this implementation written in Goland.
+* Riot API has many more methods than this implementation written in Golang.
 * Before using the library, it's advised to visit Riot API documentation page.
 
 # How to start using?
