@@ -11,7 +11,7 @@
 <pre>go get github.com/mikemight/leago</pre>
 
 # Finally
-Leago uses a rate limiter from [this library].(https://github.com/throttled/throttled/)
+Leago uses a rate limiter from [this library](https://github.com/throttled/throttled/)
 
 **IMPORTANT:** When initializing the API client, use restrictions that match the Riot API restrictions!
 * 20 requests every 1 seconds(s)
